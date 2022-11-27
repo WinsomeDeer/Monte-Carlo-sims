@@ -1,4 +1,8 @@
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import random
-
+# List to keep track of cards collected.
+cards_collected = np.zeros(830)
+# Function to open the pack.
+def pack_opener():
+    
