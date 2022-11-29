@@ -5,4 +5,12 @@ import random
 cards_collected = np.zeros(830)
 # Function to open the pack.
 def pack_opener():
+    pack = []
+    for i in range(5):
+        card = random.randint(1,830)
+        pack.append(card)
+    return pack
+
+    
+    
     
