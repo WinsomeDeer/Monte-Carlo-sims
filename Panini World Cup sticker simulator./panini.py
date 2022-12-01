@@ -11,6 +11,7 @@ def pack_opener(cards_collected):
     return cards_collected
 # Simulate a single attempt to collect all the cards.
 def single_sim_panini():
+    amount = 0
     cards_collected = np.zeros(830) # List to keep track of cards collected.
     while(np.count_nonzero(cards_collected) != 830):
         collection = pack_opener(cards_collected)
