@@ -7,7 +7,7 @@ cost = 0.80
 def pack_opener(cards_collected):
     pack = random.sample(range(1,830), 5)
     for i in range(len(pack)):
-        cards_collected[i] += 1
+        cards_collected[pack[i]] += 1
     return cards_collected
 # Simulate a single attempt to collect all the cards.
 def single_sim_panini():
