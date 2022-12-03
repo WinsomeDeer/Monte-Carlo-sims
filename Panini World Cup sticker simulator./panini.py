@@ -10,10 +10,16 @@ def pack_opener(cards_collected):
         cards_collected[pack[i]] += 1
     return cards_collected
 # Simulate a single attempt to collect all the cards.
-def single_sim_panini():
+def single_sim_panini(cards_collected):
     amount = 0
-    cards_collected = np.zeros(830) # List to keep track of cards collected.
     while(np.count_nonzero(cards_collected) != 830):
         collection = pack_opener(cards_collected)
         amount += cost
     return amount
+# Simulate 10000 sticker collection attempts.
+record_of_cost = [0]*10000
+for i in range(10000):
+    collect_attempt = []
+    cost_attempt = single_sim_panini(collect_attempt)
+    record_of_cost[i] = cost_attempt
+   
