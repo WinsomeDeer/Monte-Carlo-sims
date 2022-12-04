@@ -35,4 +35,4 @@ def many_sim_panini_cost(record_of_packs_opened):
     return record_of_cost
 # Statistical analysis of 10000 attempts.
 pack_data = many_sim_panini(10000)
-cost_data = many_sim_panini_cost(10000)
+cost_data = many_sim_panini_cost(pack_data)
