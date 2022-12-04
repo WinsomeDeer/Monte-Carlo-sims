@@ -27,13 +27,11 @@ def many_sim_panini(n):
         record_of_packs_opened[i] = pack_attempt
     return record_of_packs_opened
 # Simulate n sticker collection attempts (cost).
-def many_sim_panini_cost(n):
+def many_sim_panini_cost(record_of_packs_opened):
+    n = len(record_of_packs_opened)
     record_of_cost = [0]*n
     for i in range(n):
-        collect_attempt = []
-        pack_attempt = single_sim_panini(collect_attempt)
-        cost_attempt = cost * pack_attempt
-        record_of_cost[i] = cost_attempt
+        record_of_cost[i] = record_of_packs_opened * cost
     return record_of_cost
 # Statistical analysis of 10000 attempts.
 pack_data = many_sim_panini(10000)
