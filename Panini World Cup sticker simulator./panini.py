@@ -16,10 +16,11 @@ def single_sim_panini(cards_collected):
         collection = pack_opener(cards_collected)
         amount += cost
     return amount
-# Simulate 10000 sticker collection attempts.
-record_of_cost = [0]*10000
-for i in range(10000):
-    collect_attempt = []
-    cost_attempt = single_sim_panini(collect_attempt)
-    record_of_cost[i] = cost_attempt
-   
+# Simulate n sticker collection attempts.
+def many_sim_panini(n):
+    record_of_cost = [0]*n
+    for i in range(n):
+        collect_attempt = []
+        cost_attempt = single_sim_panini(collect_attempt)
+        record_of_cost[i] = cost_attempt
+    return record_of_cost
