@@ -2,36 +2,59 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 import matplotlib.animation as animation
-# Initialise the grid.
+# Class to initialise the grid.
 n = 50
-grid = np.ones((n,n), dtype = int) 
-# Boltzman's constant.
 k = 1.38 * 10 ** -27
-# Create a random grid of 1's and -1's.
-for i in range(n):
-    for j in range(n):
-        grid[i][j] = random.choice([-1,1])
-# Function to iterate through the grid and calculate the new grid values.
-def spin_change(x , J, T):
-    for i in range(n-1):
-        for j in range(n-1):
-            Q = (J/(k*T)) * (x[i-1][j] + x[i+1][j] + x[i][j-1] + x[i][j+1])
-            if Q <= 0:
-                x[i][j] = 1
-            else:
-                x[i][j] = -1
-    return x
-# While loop.
-i = 0
-images = []
-# Remove axes.
-fig = plt.figure()
-plt.axis('off')
-# While loop.
-while i < 50:
-    images.append((plt.imshow(grid, cmap = 'Purples'),))
-    grid = spin_change(grid, 1.602176565e-23, 1)
-    i += 1
-# Create animation.
-ani = animation.ArtistAnimation(fig, images, interval = 700, repeat_delay = 1000, blit = True)
+# Lattice Class.
+class Ising_lattice:
+    # Constructor
+    def __init__(self, n, temperature):
+        self.n = n
+        self.T = temperature
+        self.lattice = self._build_lattice
+    
+    @property
+    def lattice_size(self):
+        return {self.n, self.n}
+    # Method to build the lattice.
+    def _build_lattice(self, initial_state):
+        if initial_state == 'r':
+            lattice = np.random.choice([-1,1], self.n)
+        elif initial_state == 'u':
+            lattice = np.ones(self.n)
+        else:
+            raise ValueError(
+                "Initial state must be either 'r' or 'u'."
+            )
+        return lattice
+    # Method to calculate the energy at each point using nearest neighbour.
+    def energy(self, i, j, J, T):
+        Q = (-J/k*T)*(self.lattice[i+1][j] + self.lattice[i-1][j]
+                         + self.lattice[i][j+1] + self.lattice[i][j-1])
+        return Q
+    # Property of internal energy.
+    @property
+    def Internal_energy(self):
+        e = 0 
+        E = 0
+        E_2 = 0
+        # Calculate the energy for each cell.
+        for i in range(self.n):
+            for j in range(self.n):
+                e = self.energy(i, j, self.J, self.T)
+                E += e
+                E_2 += e**2
+        U = (1/self.n**2) * E
+        U_2 = (1/self.n**2) * E_2
+        return U, U_2
+    # Heat capacity property.
+    @property
+    def heat_capacity(self):
+        U, U_2 = self.Internal_energy
+        return U_2 - U
+    # Magnetisation property.
+    @property
+    def magnetisation(self):
+        return np.abs(np.sum(self.lattice)/self.n**2)
+# Function to run the program.
 
