@@ -27,10 +27,10 @@ class Ising_lattice:
                 "Initial state must be either 'r' or 'u'."
             )
         return lattice
-    # Method to calculate the energy at each point using nearest neighbour.
+    # Method to calculate the energy at each point using nearest neighbour with periodic boundary conditions.
     def energy(self, i, j, J, T):
-        Q = (-J/k*T)*(self.lattice[i+1][j] + self.lattice[i-1][j]
-                         + self.lattice[i][j+1] + self.lattice[i][j-1])
+        Q = (-J/k*T)*(self.lattice[(i+1)%n][j] + self.lattice[(i-1)%n][j]
+                         + self.lattice[i][(j+1)%n] + self.lattice[i][(j-1)%n]
         return Q
     # Property of internal energy.
     @property
