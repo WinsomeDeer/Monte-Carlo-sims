@@ -58,36 +58,36 @@ class Ising_lattice:
     def magnetisation(self):
         return np.abs(np.sum(self.lattice)/self.n**2)
     # Function to run one iteration.
-    def one_itr(self):
+    def one_itr(self, lattice):
         for i in range(self.n):
             for j in range(self.n):
                 if self.energy(i, j) < 0:
-                    self.lattice[i][j] = 1
+                    lattice[i][j] = 1
                 else:
-                    self.lattice[i][j] = -1
+                    lattice[i][j] = -1
     # Function to run multiple iters and plot.
-    @property
-    def Internal_energy(self):
-        e = 0 
-        E = 0
-        E_2 = 0
-        # Calculate the energy for each cell.
-        for i in range(self.n):
-            for j in range(self.n):
-                e = self.energy(i, j, self.J, self.T)
-                E += e
-                E_2 += e**2
-        U = (1/self.n**2) * E
-        U_2 = (1/self.n**2) * E_2
-        return U, U_2
-    # Heat capacity property.
-    @property
-    def heat_capacity(self):
-        U, U_2 = self.Internal_energy
-        return U_2 - U
-    # Magnetisation property.
-    @property
-    def magnetisation(self):
-        return np.abs(np.sum(self.lattice)/self.n**2)
-# Function to run the program.
-
+    def simulate(self):
+        lattice = self._build_lattice('u')
+        fig = plt.figure(figsize = (15, 15), dpi = 80)
+        self.plot(fig, lattice, 1, 1)
+        for i in range(101):
+            self.one_itr(lattice)
+            if i == 1:
+                self.plot(fig, lattice, 2, 2)
+            if i == 25:
+                self.plot(fig, lattice, 25, 3)
+            if i == 50:
+                self.plot(fig, lattice, 50, 4)
+            if i == 75:
+                self.plot(fig, lattice, 75, 5)
+            if i == 100:
+                self.plot(fig, lattice, 100, 6)
+    # Plotting function.
+    def plot(self, f, grid, i, N):
+        X, Y = np.meshgrid(range(self.n), range(self.n))
+        sp = f.add_subplot(3, 3, N)
+        plt.setp(sp.get_xticklabels(), visible=False)      
+        plt.pcolormesh(X, Y, grid, cmap=plt.cm.RdBu)
+        plt.title('Time=%d'%i)
+        plt.axis('tight')    
+    plt.show()
