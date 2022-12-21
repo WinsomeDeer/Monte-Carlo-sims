@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-import matplotlib.animation as animation
 # Class to initialise the grid.
 n = 50
 k = 1.38 * 10 ** -27
