@@ -18,7 +18,7 @@ class Ising_lattice:
         return {self.n, self.n}
     # Method to calculate the energy at each point using nearest neighbour with periodic boundary conditions.
     def energy(self, i, j, lattice):
-        Q = (-self.J/k*self.T)*(lattice[(i+1)%n][j] + lattice[(i-1)%n][j]
+        Q = 2*(lattice[i][j])*(lattice[(i+1)%n][j] + lattice[(i-1)%n][j]
                          + lattice[i][(j+1)%n] + lattice[i][(j-1)%n])
         return Q
     # Property of internal energy.
@@ -49,36 +49,41 @@ class Ising_lattice:
     def one_itr(self, lattice):
         for i in range(self.n):
             for j in range(self.n):
-                if self.energy(i, j, lattice) < 0:
-                    lattice[i][j] = 1
-                else:
-                    lattice[i][j] = -1
+                a  = np.random.randint(0, self.n)
+                b  = np.random.randint(0, self.n)
+                S = lattice[i][j]                
+                Q = self.energy(a, b, lattice)
+                if Q < 0:
+                    S *= 1
+                elif np.random.rand() < np.exp(-Q/self.T):
+                    S *= -1
+                lattice[i][j] = S
+        return lattice
     # Function to run multiple iters and plot.
     def simulate(self):
         lattice = 2*np.random.randint(2, size=(self.n, self.n))-1
         f = plt.figure(figsize = (15, 15), dpi = 80)
         self.plot(f, lattice, 1, 1)
-        for i in range(101):
+        for i in range(1001):
             self.one_itr(lattice)
             if i == 1:
                 self.plot(f, lattice, 2, 2)
-            if i == 25:
-                self.plot(f, lattice, 25, 3)
-            if i == 50:
-                self.plot(f, lattice, 50, 4)
-            if i == 75:
-                self.plot(f, lattice, 75, 5)
-            if i == 100:
-                self.plot(f, lattice, 100, 6)
+            if i == 250:
+                self.plot(f, lattice, 250, 3)
+            if i == 500:
+                self.plot(f, lattice, 500, 4)
+            if i == 750:
+                self.plot(f, lattice, 750, 5)
+            if i == 1000:
+                self.plot(f, lattice, 1000, 6)
+        plt.show()
     # Plotting function.
     def plot(self, f, grid, i, N):
         X, Y = np.meshgrid(range(self.n+1), range(self.n+1))
         sp = f.add_subplot(3, 3, N)
         plt.setp(sp.get_xticklabels(), visible=False)      
-        plt.pcolormesh(X, Y, grid)
+        plt.pcolormesh(X, Y, grid, cmap = plt.cm.RdBu)
         plt.title('Time=%d'%i)
         plt.axis('tight')
-    plt.show()
-
 a = Ising_lattice(50, 0.1, 1.60218*10**(-19))
 a.simulate()
